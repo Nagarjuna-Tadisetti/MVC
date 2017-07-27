@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Spring Demo</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<script>
+    function submit_add_form(){
+        console.log('Inside submit add form');
+        var name = $('#add_form #name').val();
+        var id = $('#add_form #id').val();
+        var location = $('#add_form #location').val();
+        $.ajax({
+            type: 'GET',
+            data: {"name": name,"id":id, "location":location},
+            url: "add",
+            success: function(response) {
+                $('#emp_add_msg').css('visibility','visible');
+                var msg = 'Employee details of '+name+' added successfully!';
+                $('#emp_add_msg').html(msg);
+            },
+            error: function(xhr) {
+                alert('Some error occurred!');
+            }
+       });
+       return false;
+    }
+    function submit_get_form(){
+        var id = $('#get_form #id').val();
+        $.ajax({
+            type: 'GET',
+            data: {"id":id},
+            url: "get",
+            success: function(response) {
+                var data = response;
+                $('#emp_details').css('visibility','visible');
+                $('#emp_name').html(data[0].name);
+                $('#emp_id').html(data[0].id);
+                $('#emp_location').html(data[0].location);
+            },
+            error: function(xhr) {
+                alert('Give id not present or some error occurred!');
+            }
+       });
+       return false;
+    }   
+</script>
+<div class="row">
+  <div class="col-sm-3 col-sm-offset-2">
+        <h2>Add Employee details</h2>
+        <form id="add_form" onsubmit="return submit_add_form()">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" id="name" placeholder="Enter Name" name="name">
+        </div>
+        <div class="form-group">
+            <label for="id">Id:</label>
+            <input type="text" class="form-control" id="id" placeholder="Enter Id" name="id">
+        </div>
+        <div class="form-group">
+            <label for="location">Location:</label>
+            <input type="text" class="form-control" id="location" placeholder="Enter Location" name="location">
+        </div>
+        <button type="submit" class="btn btn-success col-sm-4">Add</button>
+        </form>
+        <br><br><br>
+        <div id="emp_add_msg" style="visibility:hidden">
+            <span id="emp_add_success"></span>
+        </div>
+  </div>
+    
+  <div class="col-sm-3 col-sm-offset-2">
+        <h2>Get Employee details</h2>
+        <form id="get_form" onsubmit="return submit_get_form()">
+        <div class="form-group">
+            <label for="id">Id:</label>
+            <input type="text" class="form-control" id="id" placeholder="Enter Id" name="id">
+        </div>
+        <button type="submit" class="btn btn-success col-sm-4">Get</button>
+      </form>
+      <br><br><br>
+      <div id="emp_details" style="visibility:hidden">
+        <label>Name:</label><span id="emp_name"></span><br>
+        <label>Id:</label><span id="emp_id"></span><br>
+        <label>Location:</label><span id="emp_location"></span><br>
+      </div>
+  </div>
+</div>
+</body>
+</html>
